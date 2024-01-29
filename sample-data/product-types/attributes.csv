@@ -1,0 +1,4 @@
+name,type,attributeConstraint,isRequired,isSearchable,inputTip.en-US,label.de-DE,inputTip.de-DE,label.en-US,textInputHint,displayGroup
+accessoryTo,text,SameForAll,false,true,,accessoryTo,accessoryTo,accessoryTo,SingleLine,Other
+itemset,boolean,SameForAll,true,true,,mehrteilig,,itemset,SingleLine,Other
+itemcount,number,Unique,false,true,,Teilezahl,,Item Count,SingleLine,Other

@@ -1,0 +1,44 @@
+{
+  "collection": "@nestjs/schematics",
+  "monorepo": true,
+  "root": "apps/api-hub",
+  "sourceRoot": "apps/api-hub/src",
+  "compilerOptions": {
+    "deleteOutDir": true,
+    "tsConfigPath": "apps/api-hub/tsconfig.app.json",
+    "assets": [
+      {
+        "include": "**/*.graphql",
+        "watchAssets": true
+      },
+      {
+        "include": "config/**/*.yml"
+      },
+      {
+        "include": "**/i18n/**/*",
+        "watchAssets": true
+      }
+    ],
+    "webpack": true
+  },
+  "projects": {
+    "api-hub": {
+      "type": "application",
+      "root": "apps/api-hub",
+      "entryFile": "main",
+      "sourceRoot": "apps/api-hub/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/api-hub/tsconfig.app.json"
+      }
+    },
+    "port-definitions": {
+      "type": "library",
+      "root": "libs/port-definitions",
+      "entryFile": "index",
+      "sourceRoot": "libs/port-definitions/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/port-definitions/tsconfig.lib.json"
+      }
+    }
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "declaration": true,
+    "removeComments": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "esModuleInterop": true,
+    "target": "es2017",
+    "baseUrl": "./",
+    "sourceMap": true,
+    "outDir": "./dist",
+    "incremental": true,
+    "allowJs": false,
+    "paths": {
+      "@precomposer/port-definitions": [
+        "libs/port-definitions/src"
+      ],
+      "@precomposer/port-definitions/*": [
+        "libs/port-definitions/src/*"
+      ]
+    }
+  }
+}

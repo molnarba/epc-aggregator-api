@@ -1,0 +1,16 @@
+# Generates GraphQL TypeScript classes from PriceService schema.
+# Simply execute from root folder:
+# npm run generate:priceService
+
+
+# Further reading
+# https://graphql-code-generator.com/docs/getting-started/installation
+# https://graphql-code-generator.com/docs/getting-started/codegen-config
+
+overwrite: true
+schema: "apps/api-hub/src/prices/outer/generated/priceservice.graphqls"
+generates:
+  apps/api-hub/src/prices/outer/generated/priceservice.types.ts:
+    plugins:
+      - "typescript"
+      - "typescript-operations"

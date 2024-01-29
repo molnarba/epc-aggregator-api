@@ -1,0 +1,122 @@
+type Cart {
+  id: String
+  version: Int
+  cartItems: [CartItem]
+  totalNetPriceInCent: Int
+  totalGrossPriceInCent: Int
+  currencyCode: String
+  taxes: [CartTax]
+  shippingAddress: CartAddress
+  billingAddress: CartAddress
+  customerId: String
+  customerEmail: String
+  cartState: String
+}
+
+type CartItem {
+  id: String
+  productId: String
+  productName: String
+  productSlug: String
+  sku: String
+  priceInCent: Int
+  totalNetPriceInCent: Int
+  totalGrossPriceInCent: Int
+  quantity: Int
+  images: [Image]
+  tax: CartItemTax
+}
+
+type CartAddress {
+  salutation: String
+  firstName: String
+  lastName: String
+  streetName: String
+  streetNumber: String
+  postalCode: String
+  city: String
+  country: String
+  company: String
+}
+
+type Image {
+  url: String!
+  alt: String!
+  title: String
+  width: String!
+  height: String!
+}
+
+type CartTax {
+  name: String
+  rate: Float
+  amount: Int
+}
+
+type CartItemTax {
+  name: String
+  amount: Int
+  includedInPrice: Boolean
+}
+
+type Query {
+  myCart(currencyCode: String, locale: String): Cart
+}
+
+# NB: every GraphQL update action is converted into an Commercetools update action by CartUpdateActionConverter.
+# thus, CartUpdateActionConverter needs to be modified accordingly if new GraphQL update actions are added!
+input CartUpdateAction {
+  addLineItemAction: AddLineItemAction
+  changeLineItemQuantityAction: ChangeLineItemQuantityAction
+  removeLineItemAction: RemoveLineItemAction
+  setShippingAddressAction: SetShippingAddressAction
+  setBillingAddressAction: SetBillingAddressAction
+  setCustomerEmailAction: SetCustomerEmailAction
+  placeOrderAction: PlaceOrderAction
+}
+
+input RemoveLineItemAction {
+  lineItemId: String!
+}
+
+input ChangeLineItemQuantityAction {
+  lineItemId: String!
+  quantity: Int!
+}
+
+input AddLineItemAction {
+  sku: String!
+  quantity: Int = 1
+}
+
+input SetCustomerEmailAction {
+  email: String
+}
+
+input SetShippingAddressAction {
+  shippingAddress: Address
+}
+
+input SetBillingAddressAction {
+  billingAddress: Address
+}
+
+input PlaceOrderAction {
+  orderState: String
+}
+
+input Address {
+  salutation: String
+  firstName: String
+  lastName: String
+  streetName: String
+  streetNumber: String
+  postalCode: String
+  city: String
+  country: String!
+  company: String
+}
+
+type Mutation {
+  batchUpdateMyCart(actions: [CartUpdateAction]!, locale: String, currencyCode: String): Cart
+}

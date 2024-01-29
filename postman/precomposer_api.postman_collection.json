@@ -1,0 +1,872 @@
+{
+	"info": {
+		"_postman_id": "3ca9d931-0641-4c9c-80d9-0b9877d54882",
+		"name": "eCube Precomposer",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "5147177"
+	},
+	"item": [
+		{
+			"name": "customers",
+			"item": [
+				{
+					"name": "sign-up",
+					"item": [
+						{
+							"name": "signUpCustomer (username already exists)",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"tests[\"Status code \" + responseCode.code] = responseCode.code === 200 || responseCode.code === 201;"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "graphql",
+									"graphql": {
+										"query": "mutation signUpCustomer($customerData: SignUpCustomerData!, $anonymousCartId: String!, $rememberMe: Boolean) {\n  signUpCustomer(customerData: $customerData, anonymousCartId: $anonymousCartId, rememberMe: $rememberMe) {\n    id\n    version\n    email\n    isEmailVerified\n    # this token contains the encrypted customer-ID\n    # and is used to verify the JSON web token \n    # contained in the authorization cookie\n    token\n  }\n}\n",
+										"variables": "{\n  \"customerData\":  {\n    \"email\": \"{{signup_username}}\",\n    \"password\": \"{{signup_password}}\",\n    \"firstName\": \"postman\",\n    \"lastName\": \"user\",\n    \"salutation\": \"Mr\"\n  },\n  \"anonymousCartId\": \"{{anonymous_cart_id}}\",\n  \"rememberMe\": true\n}"
+									}
+								},
+								"url": {
+									"raw": "{{graphql_url}}",
+									"host": [
+										"{{graphql_url}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "signUpCustomer",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"tests[\"Status code \" + responseCode.code] = responseCode.code === 200 || responseCode.code === 201;",
+											"var response = JSON.parse(responseBody);",
+											"if(response.data.signUpCustomer && response.data.signUpCustomer.id && response.data.signUpCustomer.token) {",
+											"  pm.environment.set(\"customer_id\", response.data.signUpCustomer.id); ",
+											"  pm.environment.set(\"customer_version\", response.data.signUpCustomer.version); ",
+											"  pm.environment.set(\"auth_token\", response.data.signUpCustomer.token);",
+											"  pm.environment.set(\"anonymous_cart_id\", \"\");",
+											"  pm.environment.set(\"anonymous_line_item_id\", \"\");",
+											"}"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "graphql",
+									"graphql": {
+										"query": "mutation signUpCustomer($customerData: SignUpCustomerData!, $anonymousCartId: String, $rememberMe: Boolean) {\n  signUpCustomer(customerData: $customerData, anonymousCartId: $anonymousCartId, rememberMe: $rememberMe) {\n    id\n    version\n    email\n    isEmailVerified\n    # this token contains the encrypted customer-ID\n    # and is used to verify the JSON web token \n    # contained in the authorization cookie\n    token\n  }\n}\n",
+										"variables": "{\n  \"customerData\":  {\n    \"email\": \"{{signup_username}}\",\n    \"password\": \"{{signup_password}}\",\n    \"firstName\": \"postman\",\n    \"lastName\": \"user\",\n    \"salutation\": \"Mr\"\n  },\n  \"anonymousCartId\": \"{{anonymous_cart_id}}\",\n  \"rememberMe\": true\n}"
+									}
+								},
+								"url": {
+									"raw": "{{graphql_url}}",
+									"host": [
+										"{{graphql_url}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "sign-in",
+					"item": [
+						{
+							"name": "signInCustomer",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"tests[\"Status code \" + responseCode.code] = responseCode.code === 200 || responseCode.code === 201;",
+											"var response = JSON.parse(responseBody);",
+											"if(response.data.signInCustomer && response.data.signInCustomer.id && response.data.signInCustomer.token) {",
+											"  pm.environment.set(\"customer_id\", response.data.signInCustomer.id); ",
+											"  pm.environment.set(\"customer_version\", response.data.signInCustomer.version); ",
+											"  pm.environment.set(\"auth_token\", response.data.signInCustomer.token);",
+											"  pm.environment.set(\"anonymous_cart_id\", \"\");",
+											"  pm.environment.set(\"anonymous_line_item_id\", \"\");",
+											"}"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "graphql",
+									"graphql": {
+										"query": "query signInCustomer($email: String!, $password: String!, $anonymousCartId: String, $rememberMe: Boolean) {\n  signInCustomer(email: $email, password: $password, anonymousCartId: $anonymousCartId, rememberMe: $rememberMe) {\n    id\n    version\n    email\n    firstName\n    lastName\n    salutation\n    isEmailVerified\n    token\n  }\n}",
+										"variables": "{\n  \"email\": \"{{username}}\",\n  \"password\": \"{{password}}\",\n  \"rememberMe\": true\n}"
+									}
+								},
+								"url": {
+									"raw": "{{graphql_url}}",
+									"host": [
+										"{{graphql_url}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "sign-out",
+					"item": [
+						{
+							"name": "signOutCustomer",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"tests[\"Status code \" + responseCode.code] = responseCode.code === 200 || responseCode.code === 201;",
+											"pm.environment.set(\"auth_token\", \"\");",
+											"pm.environment.set(\"customer_id\", \"\"); ",
+											"pm.environment.set(\"customer_version\", \"\"); ",
+											"pm.environment.set(\"customer_cart_id\", \"\");",
+											"pm.environment.set(\"customer_line_item_id\", \"\");"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "graphql",
+									"graphql": {
+										"query": "query signOutCustomer {\n  signOutCustomer\n}",
+										"variables": ""
+									}
+								},
+								"url": {
+									"raw": "{{graphql_url}}",
+									"host": [
+										"{{graphql_url}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "profile",
+					"item": [
+						{
+							"name": "myCustomer",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"tests[\"Status code \" + responseCode.code] = responseCode.code === 200 || responseCode.code === 201;"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "graphql",
+									"graphql": {
+										"query": "query myCustomer {\n  myCustomer {\n    id\n    version\n    email\n    isEmailVerified\n    token\n    addresses {\n        key\n        type\n        streetName\n        salutation\n        firstName\n        lastName\n        streetName\n        streetNumber\n        postalCode\n        city\n        country\n        company\n    }\n    defaultBillingAddressKey\n    defaultShippingAddressKey\n  }\n}",
+										"variables": ""
+									}
+								},
+								"url": {
+									"raw": "{{graphql_url}}",
+									"host": [
+										"{{graphql_url}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "myOrders",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"tests[\"Status code \" + responseCode.code] = responseCode.code === 200 || responseCode.code === 201;"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "graphql",
+									"graphql": {
+										"query": "query myOrders {\n  myOrders {\n    metadata {\n        count\n        limit\n        offset\n        total\n    },\n    orders {\n        orderNumber\n        createdAt\n        currencyCode\n        orderState\n        totalPriceInCent\n        orderItems {\n            productId\n            productName\n            productSlug\n            sku\n            totalPriceInCent\n            priceInCent\n            quantity\n        }\n    }\n  }\n}",
+										"variables": ""
+									}
+								},
+								"url": {
+									"raw": "{{graphql_url}}",
+									"host": [
+										"{{graphql_url}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "batchUpdateMyCustomer",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"tests[\"Status code \" + responseCode.code] = responseCode.code === 200 || responseCode.code === 201;"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "graphql",
+									"graphql": {
+										"query": "mutation batchUpdateMyCustomer($actions: [CustomerUpdateAction]!) {\n  batchUpdateMyCustomer(actions: $actions) {\n    id\n    version\n    email\n    isEmailVerified\n    token\n    addresses {\n        key\n        type\n        streetName\n        salutation\n        firstName\n        lastName\n        streetName\n        streetNumber\n        postalCode\n        city\n        country\n        company\n    }\n    defaultBillingAddressKey\n    defaultShippingAddressKey\n  }\n}",
+										"variables": "{\n  \"actions\": [\n    {\n      \"updateBillingAddressAction\": {\n        \"address\": {\n            \"streetName\": \"tutut\",\n            \"country\": \"DE\"\n        }\n      }\n    }, {\n      \"updateShippingAddressAction\": {\n        \"address\": {\n            \"streetName\": \"blabla\",\n            \"country\": \"DE\"\n        }\n      }\n    }\n  ]\n}"
+									}
+								},
+								"url": {
+									"raw": "{{graphql_url}}",
+									"host": [
+										"{{graphql_url}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "carts",
+			"item": [
+				{
+					"name": "myCart",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"tests[\"Status code \" + responseCode.code] = responseCode.code === 200 || responseCode.code === 201;",
+									"var response = JSON.parse(responseBody);",
+									"if(response.data.myCart && response.data.myCart.id && response.data.myCart.version) {",
+									"  pm.environment.set(\"customer_cart_id\", response.data.myCart.id);",
+									"}",
+									"if(response.data.myCart && response.data.myCart.cartItems && response.data.myCart.cartItems[0] && response.data.myCart.cartItems[0].id) { ",
+									"  pm.environment.set(\"customer_line_item_id\", response.data.myCart.cartItems[0].id);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-xsrf-token",
+								"value": "{{auth_token}}",
+								"type": "text"
+							},
+							{
+								"key": "Cookie",
+								"value": "test",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query myCart($locale: String, $currencyCode: String) {\n  myCart(locale: $locale, currencyCode: $currencyCode) {\n    id\n    customerId\n    version\n    totalNetPriceInCent\n    totalGrossPriceInCent\n    taxes {\n        rate\n        amount\n    }\n    cartItems {\n      id\n      quantity\n      productId\n      productName\n      productSlug\n      sku\n      priceInCent\n      totalNetPriceInCent\n      totalGrossPriceInCent\n      images {\n        url\n        title\n        alt\n        width\n        height\n      }\n    }\n  }\n}\n",
+								"variables": "{\n    \"locale\": \"{{locale_code}}\",\n    \"currencyCode\": \"{{currency_code}}\"\n}"
+							}
+						},
+						"url": {
+							"raw": "{{graphql_url}}",
+							"host": [
+								"{{graphql_url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "batchUpdateMyCart: add line-item",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"tests[\"Status code \" + responseCode.code] = responseCode.code === 200 || responseCode.code === 201;",
+									"var response = JSON.parse(responseBody);",
+									"if(response.data.batchUpdateMyCart && response.data.batchUpdateMyCart.cartItems && response.data.batchUpdateMyCart.cartItems[0] && response.data.batchUpdateMyCart.cartItems[0].id) { ",
+									"  pm.environment.set(\"customer_line_item_id\", response.data.batchUpdateMyCart.cartItems[0].id);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-xsrf-token",
+								"value": "{{auth_token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation batchUpdateMyCart($actions: [CartUpdateAction]!, $locale: String) {\n  batchUpdateMyCart(actions: $actions, locale: $locale) {\n    id\n    customerId\n    version\n    totalNetPriceInCent\n    totalGrossPriceInCent\n    cartItems {\n      id\n      quantity\n      productId\n      productName\n      productSlug\n      sku\n      priceInCent\n      totalNetPriceInCent\n      totalGrossPriceInCent\n      images {\n        url\n        title\n        alt\n        width\n        height\n      }\n    }\n  }\n}",
+								"variables": "{\n  \"actions\": [\n    {\n      \"addLineItemAction\": {\n        \"sku\": \"{{sku}}\",\n        \"quantity\": 1\n      }\n    }\n  ],\n  \"locale\": \"{{locale_code}}\"\n}"
+							}
+						},
+						"url": {
+							"raw": "{{graphql_url}}",
+							"host": [
+								"{{graphql_url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "batchUpdateMyCart: change line-item quantity",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"tests[\"Status code \" + responseCode.code] = responseCode.code === 200 || responseCode.code === 201;",
+									"var response = JSON.parse(responseBody);",
+									"if(response.data.batchUpdateMyCart && response.data.batchUpdateMyCart.cartItems && response.data.batchUpdateMyCart.cartItems[0] && response.data.batchUpdateMyCart.cartItems[0].id) { ",
+									"  pm.environment.set(\"customer_line_item_id\", response.data.batchUpdateMyCart.cartItems[0].id);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-xsrf-token",
+								"type": "text",
+								"value": "{{auth_token}}"
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation batchUpdateMyCart($actions: [CartUpdateAction]!, $locale: String) {\n  batchUpdateMyCart(actions: $actions, locale: $locale) {\n    id\n    customerId\n    version\n    totalNetPriceInCent\n    totalGrossPriceInCent\n    cartItems {\n      id\n      quantity\n      productId\n      productName\n      productSlug\n      sku\n      priceInCent\n      totalNetPriceInCent\n      totalGrossPriceInCent\n      images {\n        url\n        title\n        alt\n        width\n        height\n      }\n    }\n  }\n}",
+								"variables": "{\n  \"actions\": [\n    {\n      \"changeLineItemQuantityAction\": {\n        \"lineItemId\": \"{{customer_line_item_id}}\",\n        \"quantity\": 10\n      }\n    }\n  ],\n  \"locale\": \"{{locale_code}}\"\n}"
+							}
+						},
+						"url": {
+							"raw": "{{graphql_url}}",
+							"host": [
+								"{{graphql_url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "batchUpdateMyCart: remove line-item",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"tests[\"Status code \" + responseCode.code] = responseCode.code === 200 || responseCode.code === 201;",
+									"var response = JSON.parse(responseBody);",
+									"if(response.data.batchUpdateMyCart && response.data.batchUpdateMyCart.cartItems && response.data.batchUpdateMyCart.cartItems[0] && response.data.batchUpdateMyCart.cartItems[0].id) { ",
+									"  pm.environment.set(\"customer_line_item_id\", response.data.batchUpdateMyCart.cartItems[0].id);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-xsrf-token",
+								"type": "text",
+								"value": "{{auth_token}}"
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation batchUpdateMyCart($actions: [CartUpdateAction]!, $locale: String) {\n  batchUpdateMyCart(actions: $actions, locale: $locale) {\n    id\n    customerId\n    version\n    totalNetPriceInCent\n    totalGrossPriceInCent\n    cartItems {\n      id\n      quantity\n      productId\n      productName\n      productSlug\n      sku\n      priceInCent\n      totalNetPriceInCent\n      totalGrossPriceInCent\n      images {\n        url\n        title\n        alt\n        width\n        height\n      }\n    }\n  }\n}",
+								"variables": "{\n  \"actions\": [\n    {\n      \"removeLineItemAction\": {\n        \"lineItemId\": \"{{customer_line_item_id}}\"\n      }\n    }\n  ],\n  \"locale\": \"{{locale_code}}\"\n}"
+							}
+						},
+						"url": {
+							"raw": "{{graphql_url}}",
+							"host": [
+								"{{graphql_url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "batchUpdateMyCart: completeToOrder",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"tests[\"Status code \" + responseCode.code] = responseCode.code === 200 || responseCode.code === 201;",
+									"var response = JSON.parse(responseBody);",
+									"if(response.data.batchUpdateCart && response.data.batchUpdateCart.cartItems && response.data.batchUpdateCart.cartItems[0] && response.data.batchUpdateCart.cartItems[0].id) { ",
+									"  pm.environment.set(\"anonymous_line_item_id\", response.data.batchUpdateCart.cartItems[0].id);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation batchUpdateMyCart($actions: [CartUpdateAction]!, $locale: String, $currencyCode: String) {\n  batchUpdateMyCart(actions: $actions, locale: $locale, currencyCode: $currencyCode) {\n    id\n    customerId\n    version\n    totalNetPriceInCent\n    totalGrossPriceInCent\n    customerEmail\n    cartState\n    billingAddress {\n        firstName\n    }\n    shippingAddress {\n        country\n    }\n    cartItems {\n      id\n      quantity\n      productId\n      productName\n      productSlug\n      priceInCent\n      sku\n      totalNetPriceInCent\n      totalGrossPriceInCent\n      images {\n        url\n        title\n        alt\n        width\n        height\n      }\n    }\n  }\n}\n",
+								"variables": "{\n  \"actions\": [\n    {\n      \"placeOrderAction\": {\n      }\n    }\n  ],\n  \"locale\": \"{{locale_code}}\",\n  \"currencyCode\": \"{{currency_code}}\"\n}"
+							}
+						},
+						"url": {
+							"raw": "{{graphql_url}}",
+							"host": [
+								"{{graphql_url}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "catalog",
+			"item": [
+				{
+					"name": "categories",
+					"item": [
+						{
+							"name": "categoryList",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "graphql",
+									"graphql": {
+										"query": "query categoryList($locale: String) {\n  categoryList(locale: $locale) {\n    result {\n      id\n      parentId\n      key\n      name\n      slug\n      description\n      hasChildren\n    }\n  }\n}\n",
+										"variables": "{\n  \"locale\": \"{{locale_code}}\"\n}"
+									}
+								},
+								"url": {
+									"raw": "{{graphql_url}}",
+									"host": [
+										"{{graphql_url}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "categoryTree",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "graphql",
+									"graphql": {
+										"query": "query categoryTree($locale: String) {\n  categoryTree(locale: $locale) {\n    # nav-level 1\n    root {\n      category {\n        id\n        parentId\n        key\n        slug\n        name\n        description\n      }\n      # nav-level 2\n      children {\n        category {\n          id\n          parentId\n          key\n          slug\n          name\n          description\n        }\n        # nav-level 3\n        children {\n          category {\n            id\n            parentId\n            key\n            slug\n            name\n            description\n          }\n          # nav-level 4\n          children {\n            category {\n              id\n              parentId\n              key\n              slug\n              name\n              description\n            }\n          }\n        }\n      }\n    }\n  }\n}\n",
+										"variables": "{\n  \"locale\": \"{{locale_code}}\"\n}"
+									}
+								},
+								"url": {
+									"raw": "{{graphql_url}}",
+									"host": [
+										"{{graphql_url}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "categoryBySlug",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"tests[\"Status code \" + responseCode.code] = responseCode.code === 200 || responseCode.code === 201;",
+											"var response = JSON.parse(responseBody);",
+											"if(response.data.categoryBySlug && response.data.categoryBySlug.id) { ",
+											"  pm.environment.set(\"category_id\", response.data.categoryBySlug.id);",
+											"}",
+											"if(response.data.categoryBySlug && response.data.categoryBySlug.key) { ",
+											"  pm.environment.set(\"category_key\", response.data.categoryBySlug.key);",
+											"}"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "graphql",
+									"graphql": {
+										"query": "query categoryBySlug($categorySlug: String!, $locale: String)  {\n  categoryBySlug(slug: $categorySlug, locale: $locale) {\n    id\n    parentId\n    key\n    name\n    slug\n    description\n    hasChildren\n  }\n}",
+										"variables": "{\n  \"categorySlug\": \"{{category_slug}}\",\n  \"locale\": \"{{locale_code}}\"\n}"
+									}
+								},
+								"url": {
+									"raw": "{{graphql_url}}",
+									"host": [
+										"{{graphql_url}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "childCategoriesByParentSlug",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"tests[\"Status code \" + responseCode.code] = responseCode.code === 200 || responseCode.code === 201;"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "graphql",
+									"graphql": {
+										"query": "query childCategoriesByParentSlug($parentSlug: String, $locale: String) {\n  childCategoriesByParentSlug(parentSlug: $parentSlug, locale: $locale) {\n    result {\n      id\n      parentId\n      key\n      name\n      slug\n      description\n      hasChildren\n    }\n  }\n}",
+										"variables": "{\n  \"parentSlug\": \"{{category_slug}}\",\n  \"locale\": \"{{locale_code}}\"\n}"
+									}
+								},
+								"url": {
+									"raw": "{{graphql_url}}",
+									"host": [
+										"{{graphql_url}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "childCategoriesByParentSlugWithFacets",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"tests[\"Status code \" + responseCode.code] = responseCode.code === 200 || responseCode.code === 201;"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "graphql",
+									"graphql": {
+										"query": "query childCategoriesByParentSlugWithFacets($categorySlug: String, $categoryId: String!, $categoryKey: String!, $locale: String) {\n  childCategoriesByParentSlug(parentSlug: $categorySlug, locale: $locale) {\n    result {\n      id\n      parentId\n      key\n      name\n      slug\n      description\n      hasChildren\n    }\n  }\n  productList(\n    filter: {\n      categoryId: $categoryId\n      categoryKey: $categoryKey\n      attributes: []\n    }, locale: $locale, page: 1, perPage: 10) {\n    facets {\n      name\n      type\n      values {\n        ... on FacetRange {\n          from\n          fromStr\n          to\n          toStr\n          count\n          productCount\n          total\n          min\n          max\n          mean\n        }\n        ... on FacetTerm {\n          term\n          count\n          label\n        }\n      }\n      displayOptions {\n        key\n        value\n      }\n    }\n  }\n}",
+										"variables": "{\n  \"categoryId\": \"{{category_id}}\",\n  \"categoryKey\": \"{{category_key}}\",\n  \"categorySlug\": \"{{category_slug}}\",\n  \"locale\": \"{{locale_code}}\"\n}"
+									}
+								},
+								"url": {
+									"raw": "{{graphql_url}}",
+									"host": [
+										"{{graphql_url}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "products",
+					"item": [
+						{
+							"name": "productList",
+							"item": [
+								{
+									"name": "categoryBySlug (women-clothing-trousers)",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"tests[\"Status code \" + responseCode.code] = responseCode.code === 200 || responseCode.code === 201;",
+													"var response = JSON.parse(responseBody);",
+													"if(response.data.categoryBySlug && response.data.categoryBySlug.id) { ",
+													"  pm.environment.set(\"category_id\", response.data.categoryBySlug.id);",
+													"}",
+													"if(response.data.categoryBySlug && response.data.categoryBySlug.key) { ",
+													"  pm.environment.set(\"category_key\", response.data.categoryBySlug.key);",
+													"}"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "graphql",
+											"graphql": {
+												"query": "query categoryBySlug($categorySlug: String!, $locale: String)  {\n  categoryBySlug(slug: $categorySlug, locale: $locale) {\n    id\n    parentId\n    key\n    name\n    slug\n    description\n  }\n}",
+												"variables": "{\n  \"categorySlug\": \"women\",\n  \"locale\": \"{{locale_code}}\"\n}"
+											}
+										},
+										"url": {
+											"raw": "{{graphql_url}}",
+											"host": [
+												"{{graphql_url}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "productList",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"tests[\"Status code \" + responseCode.code] = responseCode.code === 200 || responseCode.code === 201;"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"protocolProfileBehavior": {
+										"disabledSystemHeaders": {}
+									},
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "graphql",
+											"graphql": {
+												"query": "query productList($filter: Filter!, $locale: String, $page: Int, $perPage: Int, $currencyCode: String)  {\n  productList(filter: $filter, locale: $locale, page: $page, perPage: $perPage, currencyCode: $currencyCode) {\n    products {\n      id\n      slug\n      name\n      description\n      categoryReferences {\n          id\n      }\n      attributeDefinitions { \n        name \n        label \n      }\n      variants {\n        sku\n        prices {\n          centAmount\n          discountedCentAmount\n        }\n      }\n      images {\n        url\n      }\n    }\n    facets {\n      name\n      type\n      dataType\n      label\n      values {\n        __typename\n        ... on FacetRange {\n          from\n          fromStr\n          to\n          toStr\n          count\n          productCount\n          total\n          min\n          max\n          mean\n        }\n        ... on FacetTerm {\n          term\n          count\n          label\n        }\n      }\n      displayOptions {\n        key\n        value\n      }\n    }\n    metadata {\n      limit\n      count\n      offset\n      total\n      source\n    }\n  }\n}",
+												"variables": "{\n    \"filter\": {\n        \"categorySlug\": \"{{category_slug}}\",\n        \"attributes\": []\n    },\n    \"locale\": \"{{locale_code}}\",\n    \"currencyCode\": \"{{currency_code}}\",\n    \"page\": 1,\n    \"perPage\": 10\n}"
+											}
+										},
+										"url": {
+											"raw": "{{graphql_url}}",
+											"host": [
+												"{{graphql_url}}"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "productBySlug",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"tests[\"Status code \" + responseCode.code] = responseCode.code === 200 || responseCode.code === 201;"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "graphql",
+									"graphql": {
+										"query": "query productBySlug($productSlug: String!, $locale: String, $currencyCode: String) {\n  productBySlug(slug: $productSlug, locale: $locale, currencyCode: $currencyCode) {\n    id\n    slug\n    name\n    description\n    attributeDefinitions {\n        name\n        type\n        label\n        attributeConstraint\n    }\n    variants {\n      sku\n      isMaster\n      isMatching\n      attributesRaw {\n          name\n          value\n      }\n      prices {\n        centAmount\n      }\n    }\n    images {\n      url\n      alt\n      width\n      height\n      title\n    }\n    categoryReferences {\n      id\n    }\n  }\n}",
+										"variables": "{\n  \"productSlug\": \"{{product_slug}}\",\n  \"locale\": \"{{locale_code}}\",\n  \"currencyCode\": \"{{currency_code}}\"\n}"
+									}
+								},
+								"url": {
+									"raw": "{{graphql_url}}",
+									"host": [
+										"{{graphql_url}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "introspection",
+			"item": [
+				{
+					"name": "Shop-Template Introspection Query",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query IntrospectionQuery {\n  __schema {\n    queryType {\n      name\n    }\n    mutationType {\n      name\n    }\n    subscriptionType {\n      name\n    }\n    types {\n      ...FullType\n    }\n    directives {\n      name\n      description\n      locations\n      args {\n        ...InputValue\n      }\n    }\n  }\n}\n\nfragment FullType on __Type {\n  kind\n  name\n  description\n  fields(includeDeprecated: true) {\n    name\n    description\n    args {\n      ...InputValue\n    }\n    type {\n      ...TypeRef\n    }\n    isDeprecated\n    deprecationReason\n  }\n  inputFields {\n    ...InputValue\n  }\n  interfaces {\n    ...TypeRef\n  }\n  enumValues(includeDeprecated: true) {\n    name\n    description\n    isDeprecated\n    deprecationReason\n  }\n  possibleTypes {\n    ...TypeRef\n  }\n}\n\nfragment InputValue on __InputValue {\n  name\n  description\n  type {\n    ...TypeRef\n  }\n  defaultValue\n}\n\nfragment TypeRef on __Type {\n  kind\n  name\n  ofType {\n    kind\n    name\n    ofType {\n      kind\n      name\n      ofType {\n        kind\n        name\n        ofType {\n          kind\n          name\n          ofType {\n            kind\n            name\n            ofType {\n              kind\n              name\n              ofType {\n                kind\n                name\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}",
+								"variables": ""
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/graphql",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"graphql"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "content",
+			"item": [
+				{
+					"name": "pageContent",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query content {\n  pageContent(slug: \"index\")\n}\n",
+								"variables": ""
+							}
+						},
+						"url": {
+							"raw": "{{graphql_url}}",
+							"host": [
+								"{{graphql_url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "pageMetadata",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query content($slugs: String, $locale: String) {\n  pageMetadata(slugs: $slugs, locale: $locale) {\n      slug\n      title\n      tags\n  }\n}\n",
+								"variables": "{\n    \"slugs\": \"\"\n}"
+							}
+						},
+						"url": {
+							"raw": "{{graphql_url}}",
+							"host": [
+								"{{graphql_url}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}

@@ -1,0 +1,49 @@
+
+type CategoryList {
+  result: [Category]
+}
+
+type Category {
+  id: String
+  key: String
+  parentId: String
+  name: String
+  slug: String
+  description: String
+  hasChildren: Boolean
+}
+
+type CategoryTree {
+  root: [CategoryNode!]
+}
+
+# NB: GraphQL uses composition over inheritance
+type CategoryNode {
+  category: Category!
+  children: [CategoryNode!]
+}
+
+# NB: the default locale is set by the 'RegionDefaultsPipe' in the resolver implementation
+type Query {
+  "returns a list of categories (max. 500)"
+  categoryList(locale: String): CategoryList
+
+  "returns a category for a given category-ID"
+  categoryById(id: String!, locale: String): Category
+
+  "returns a category for a given slug"
+  categoryBySlug(slug: String!, locale: String): Category
+
+  "returns a category for a given key"
+  categoryByKey(key: String!, locale: String): Category
+
+  # NB: the parent-ID is optional in order to select the 'main-categories' without a parent
+  "returns a list of categories for a given parent category-ID (max. 500)"
+  childCategoriesByParentId(parentId: String, locale: String): CategoryList
+
+  # NB: the parent-slug is optional in order to select the 'main-categories' without a parent
+  "returns a list of categories for a given parent category-slug (max. 500)"
+  childCategoriesByParentSlug(parentSlug: String, locale: String): CategoryList
+
+  categoryTree(locale: String): CategoryTree
+}

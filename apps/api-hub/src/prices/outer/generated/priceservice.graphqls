@@ -1,0 +1,9 @@
+type Price {
+    sku: ID!
+    centAmount: Int!
+}
+
+type Query {
+    priceForSku(sku: String!): Price
+    pricesForSkus(skuList: [String!]!): [Price]
+}

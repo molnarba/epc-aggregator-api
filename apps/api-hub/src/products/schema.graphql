@@ -1,0 +1,139 @@
+scalar JSON
+
+type ProductList {
+  description: String
+  facets(selected: [String] = []): [Facet]
+  metadata: Metadata!
+  name: String
+  products: [Product!]
+}
+
+type Product {
+  attributeDefinitions: [AttributeDefinition!]!
+  categoryReferences: [CategoryReference!]
+  categoryPaths: [CategoryPath!]!
+  description: String
+  id: String!
+  images: [Image!]
+  name: String
+  slug: String
+  variants: [ProductVariant!]!
+}
+
+
+type CategoryReference {
+  id: String!
+}
+
+type CategoryPath {
+  value: String!
+}
+
+type ProductAttribute {
+  name: String!
+  value: JSON!
+}
+
+type AttributeDefinition {
+  attributeConstraint: String!
+  label: String
+  name: String!
+  type: JSON!
+}
+
+type ProductVariant {
+  attributesRaw: [ProductAttribute!]!
+  id: String!
+  isMaster: Boolean!
+  isMatching: Boolean!
+  prices: [Price!]!
+  sku: String!
+}
+
+type Price {
+  centAmount: Int!
+  currencyCode: String
+  discountedCentAmount: Int
+  taxType: String!
+}
+
+type Image {
+  url: String!
+  alt: String!
+  title: String
+  width: String!
+  height: String!
+}
+
+type Metadata {
+  count: Int!
+  limit: Int!
+  offset: Int!
+  total: Int!
+  source: String!
+}
+
+type Facet {
+  dataType: String!
+  displayOptions: [StringKeyValueTuple]!
+  label: String
+  missing: Int
+  name: String!
+  total: Int
+  type: String!
+  values: [FacetValue]
+}
+
+union FacetValue = FacetRange | FacetTerm
+
+type FacetRange {
+  count: Int!
+  from: Int!
+  fromStr: String
+  max: Int!
+  mean: Int!
+  min: Int!
+  productCount: Int
+  to: Int
+  toStr: String
+  total: Int!
+}
+
+type FacetTerm {
+  count: Int!
+  label: String
+  term: String!
+}
+
+type StringKeyValueTuple {
+  key: String!
+  value: String!
+}
+
+input Filter {
+  attributes: [FilterAttribute]
+  # allows to filter products by category
+  categoryId: String
+  # allows to find the configured facets by category
+  categoryKey: String
+  categorySlug: String
+  currencyCode: String
+  text: String
+}
+
+input FilterAttribute {
+  name: String
+  values: [String]
+}
+
+# NB: the default locale is set by the 'RegionDefaultsPipe' in the resolver implementation
+type Query {
+  """returns a pageable list of products"""
+  productList(filter: Filter!, locale: String, currencyCode: String, page: Int = 1, perPage: Int = 10): ProductList
+
+  """returns a product for a given product-ID"""
+  productById(id: String!, locale: String, currencyCode: String): Product
+
+  """returns a product for a given slug"""
+  productBySlug(slug: String!, locale: String, currencyCode: String): Product
+}

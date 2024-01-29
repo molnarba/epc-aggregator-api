@@ -1,0 +1,86 @@
+---
+facets_by_category:
+  root:
+    - color
+    - designer
+    - size
+  # New
+  c1:
+    - color
+    - designer
+    - size
+  # Women
+  c2:
+    - color
+    - designer
+    - size
+  # Men
+  c3:
+    - color
+    - designer
+    - size
+  # Accessoires
+  c4:
+    - color
+    - designer
+    - size
+  # Sale
+  c6:
+    - color
+    - designer
+    - size
+  # Women > Clothing > Trouser
+  c26:
+    - inStock
+    - madeInItaly
+  # Men > Clothing > Trouser
+  c48:
+    - inStock
+    - madeInItaly
+facet_settings:
+  color:
+    enabled: 'true'
+    facet_options:
+      filter: 'attributes.color.key'
+      value_comparator: 'alphaNumComparator'
+      value_comparator_order: 'asc'
+    display_options:
+      input_element: 'checkbox'
+      show_facet_count: 'true'
+  size:
+    enabled: 'true'
+    facet_options:
+      filter: 'attributes.size'
+      value_comparator: 'alphaNumComparator'
+      value_comparator_order: 'asc'
+    display_options:
+      input_element: 'checkbox'
+      show_facet_count: 'true'
+  designer:
+    enabled: 'true'
+    facet_options:
+      filter: 'attributes.designer.key'
+      value_comparator: 'alphaNumComparator'
+      value_comparator_order: 'asc'
+    display_options:
+      input_element: 'checkbox'
+      show_facet_count: 'true'
+  madeInItaly:
+    enabled: 'true'
+    facet_options:
+      filter: 'attributes.madeInItaly.key'
+      value_comparator: 'alphaNumComparator'
+      value_comparator_order: 'asc'
+    display_options:
+      input_element: 'checkbox'
+      show_facet_count: 'true'
+  inStock:
+    enabled: 'true'
+    facet_options:
+      filter: 'attributes.isOnStock'
+      value_comparator: 'alphaNumComparator'
+      value_comparator_order: 'asc'
+    display_options:
+      input_element: 'checkbox'
+      show_facet_count: 'true'
+defaultCategorySlug: 'root'

@@ -1,0 +1,23 @@
+{
+  "variants.attributes.size": "Größe",
+  "variants.attributes.color.key": "Farbe",
+  "variants.attributes.designer.key": "Designer",
+  "variants.attributes.madeInItaly.key": "Hergestellt in Italien",
+  "variants.attributes.isOnStock": "Auf Lager",
+  "size": "Größe",
+  "color": "Farbe",
+  "designer": "Designer",
+  "facet.term.blue": "blau",
+  "facet.term.black": "schwarz",
+  "facet.term.beige": "beige",
+  "facet.term.pink": "pink",
+  "facet.term.brown": "braun",
+  "facet.term.green": "grün",
+  "facet.term.grey": "grau",
+  "facet.term.T": "ja",
+  "facet.term.F": "nein",
+  "facet.term.yes": "ja",
+  "facet.term.no": "nein",
+  "taxrate.included": "inkl. Mwst",
+  "taxrate.excluded": "exkl. Mwst"
+}

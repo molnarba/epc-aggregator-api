@@ -1,0 +1,15 @@
+scalar JSON
+
+type Page {
+  slug: String!
+  title: String
+  description: String
+  tags: [String]
+}
+
+type Query {
+    # DEPRECATED - use pageContent instead!
+    content(page: String, position: String, name: String, locale: String): JSON
+    pageContent(slug: String, position: String, name: String, locale: String): JSON
+    pageMetadata(slugs: String, locale: String): [Page]
+}

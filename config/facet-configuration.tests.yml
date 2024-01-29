@@ -1,0 +1,46 @@
+# facet configuration for tests
+---
+facets_by_category:
+  # Women > Clothing > Trouser
+  c26:
+    - itemset
+    - itemcount
+    - disabled_facet_1
+    - disabled_facet_2
+  # Men > Clothing > Trouser
+  c48:
+    - itemcount
+categories_by_facet:
+  itemset:
+    - c26
+    - c48
+facet_settings:
+  # facet that is enabled per default
+  itemset:
+    facet_options:
+      filter: 'variants.attributes.itemset'
+      value_comparator: 'alphaNumComparator'
+      value_comparator_order: 'asc'
+    display_options:
+      display_element: 'checkbox'
+      show_facet_count: 'true'
+  # facet that is enabled per default
+  itemcount:
+    facet_options:
+      filter: 'variants.attributes.itemcount'
+      value_comparator: 'alphaNumComparator'
+      value_comparator_order: 'asc'
+    display_options:
+      input_element: 'checkbox'
+      show_facet_count: 'true'
+  # disabled facet without any options at all
+  disabled_facet_1:
+    enabled: 'false'
+  # disabled facet with empty display options
+  disabled_facet_2:
+    enabled: 'false'
+    facet_options:
+      filter: 'variants.attributes.itemcount'
+      value_comparator: 'alphaNumComparator'
+      value_comparator_order: 'asc'
+    display_options:

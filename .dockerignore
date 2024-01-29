@@ -1,0 +1,25 @@
+#
+# Author: Thomas Weckert (thomas.weckert@ecube.de)
+#
+
+coverage
+dist
+node_modules
+postman
+Makefile
+*.log
+Dockerfile*
+docker-compose*
+.dockerignore
+.git
+.gitignore
+README.md
+.idea
+.vscode
+*.iml
+*.bak
+.editorconfig
+.gitlab-ci.yml
+.DS_Store
+**/*.env
+sample-data

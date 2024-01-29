@@ -1,0 +1,77 @@
+#
+# Author: Thomas Weckert (thomas.weckert@ecube.de)
+#
+# https://docs.gitlab.com/ee/ci/yaml/
+#
+
+###
+# Setup
+###
+variables:
+  IMAGE_TAG: $CI_REGISTRY_IMAGE:$CI_PIPELINE_ID
+
+include: 
+  - project: $CI_PROJECT_NAMESPACE/hetzner-cloud-terraform
+    ref: master
+    file: '/gitlab-ci-templates.yml'
+
+stages:
+  - Build with Dependencies
+  - Package
+  - Update Service
+
+.job-defaults:
+  image: docker:latest
+  extends: .with-registry-login
+  only:
+    # this job should be triggered on changes of the "master" branch only
+    - master
+  tags:
+    # tags to pick up the right runner from the list of all runners
+    - docker-swarm
+    - hetzner-cloud
+    - staging
+
+###
+# Job Definitions
+###
+Build with Dependencies:
+  stage: Build with Dependencies
+  extends: .job-defaults
+  script:
+    - docker build --pull --cache-from $CI_REGISTRY_IMAGE:dependencies --target dependencies -t $CI_REGISTRY_IMAGE:dependencies .
+    - docker push $CI_REGISTRY_IMAGE:dependencies
+
+Package:
+  stage: Package
+  extends: .job-defaults
+  script:
+    # to speed up docker builds, pull the "dependencies" layer before building,
+    # and then build with '--cache-from $CI_REGISTRY_IMAGE:dependencies'
+    # this will make sure the gitlab runner has the latest base layer and can leverage caching.
+    # chances are that you did not change all layers, so the build process will be faster.
+    - docker pull $CI_REGISTRY_IMAGE:dependencies || true
+    - docker build --pull --cache-from $CI_REGISTRY_IMAGE:dependencies --cache-from $IMAGE_TAG -t $IMAGE_TAG -t $CI_REGISTRY_IMAGE:latest .
+    - docker push $CI_REGISTRY_IMAGE:latest
+    - docker push $IMAGE_TAG
+
+Update Staging Service:
+  stage: Update Service
+  extends: .notify
+  variables:
+    # defaults are set in .notify template job
+    ENVIRONMENT: staging
+    SERVICE_NAME: aggregator-backend
+
+
+###
+# This is an example of a manual trigger for another environment
+###
+#Update Production Service:
+#  stage: Update Service
+#  extends: .notify
+#  variables:
+#    ENVIRONMENT: production
+#    SERVICE_NAME: aggregator-backend
+#  rules:
+#    - when: manual

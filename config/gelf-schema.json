@@ -1,0 +1,33 @@
+{
+  "title": "GELF Schema",
+  "type": "object",
+  "properties": {
+    "source": {
+      "type": "string",
+      "source": "res.application"
+    },
+    "_status_code": {
+      "type": "integer",
+      "source": "res.statusCode"
+    },
+    "_user_agent": {
+      "type": "string",
+      "source": "req.headers.user-agent"
+    },
+    "_correlation_id": {
+      "type": "string",
+      "source": "req.headers.x-correlation-id"
+    },
+    "_server": {
+      "type": "string",
+      "source": "res.hostname"
+    },
+    "className": {
+      "type": "string"
+    },
+    "_etag": {
+      "type": "string",
+      "source": "res.headers.etag"
+    }
+  }
+}

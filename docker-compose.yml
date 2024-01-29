@@ -1,0 +1,64 @@
+#
+# Author: Thomas Weckert (thomas.weckert@ecube.de)
+#
+# This docker-compose is for development purposes only!
+#
+
+version: "3"
+
+services:
+  aggregator-backend:
+    build: .
+    image: registry.gitlab.com/${GITLAB_PROJECT_NAMESPACE}/aggregator-backend
+    hostname: docker-swarm-primary-manager
+    container_name: aggregator-backend
+    restart: always
+    ports:
+      - 3000:3000
+      - 9229:9229
+    environment:
+      NODE_ENV: "development"
+      # Commercetools API/authentication URLs
+      COMMERCETOOLS_API_URL: 'https://api.europe-west1.gcp.commercetools.com/'
+      COMMERCETOOLS_AUTH_URL: 'https://auth.europe-west1.gcp.commercetools.com/'
+      # Commercetools project
+      COMMERCETOOLS_PROJECT_KEY: "ecube-template-test"
+      # Commercetools client w. admin scope
+      COMMERCETOOLS_CLIENT_ID: "5anYTdI38oBNc4_Nm5IrHqSI"
+      COMMERCETOOLS_CLIENT_SECRET: "lj0q8YMw1OcyoiP2L0re8JnZpauct0vg"
+      # Commercetools client w. customer scope
+      COMMERCETOOLS_AUTH_CLIENT_ID: "NK9mSSr_Qh-azlTvwutVDxp_"
+      COMMERCETOOLS_AUTH_CLIENT_SECRET: "caCJ1GMPVuZjwCVex6nsURI_YDFQzBS-"
+      COMMERCETOOLS_AUTH_CLIENT_SCOPES: "manage_my_payments,manage_my_profile,view_categories,manage_my_orders,manage_my_shopping_lists,view_published_products"
+      CONTENTFUL_SPACE_ID: "wz0qhhnughp9"
+      CONTENTFUL_ENVIRONMENT: "master"
+      CONTENTFUL_MANAGEMENT_API_TOKEN: "CFPAT-0GpNWiinmSTCv-_87YmgbKMmmWPE0KuDTkYAQl6I9PU"
+      CONTENTFUL_CONTENT_DELIVERY_API_TOKEN: "Ztp1PYhDZnbleKnjY6fV3qigI6t3r9h0PWMyhwrlTSo"
+      STORYBLOK_ACCESS_TOKEN: "4aqfIPzeJfHGc3Pe9W9nfwtt"
+      GRAYLOG_HOST: "192.168.194.206"
+      GRAYLOG_PORT: "12201"
+      TELEGRAF_HOST: "192.168.194.206"
+      TELEGRAF_PORT: "8125"
+      PRICE_SERVICE_API_URL: "http://192.168.194.206:8080/graphql"
+      PRICE_SERVICE_HEALTHCHECK_URL: "http://192.168.194.206:8080/actuator/health"
+      FACET_CONFIGURATION_YAML_FILE: "./facet-configuration.commercetools.yml"
+      # the secret to sign cookies
+      COOKIE_PARSER_SIGNATURE_SECRET: "zHM7u*]Y%$$2,7Aq3bfg<]^bf#WE\"hpoRc"
+      # the secret to sign JSON web tokens
+      JWT_SECRET: ",f4.m~FoWgmC5t=?pU8_SV*4mo/jwL3-"
+      # the secret for AES256 encryption
+      CRYPTO_SECRET: "nBseyDVun~gCn@CDX[=uX&Wi4Yj6*66*"
+      # the size of the initialization vector is the same size as the block size, which for AES is always 16 bytes
+      CRYPTO_IV: "ZpnAA-i?Sdc&/5<W"
+      # some browsers, such as Chrome, ignore secure cookies that are not received over a secure connection.
+      # thus, we disable secure cookies temporarily
+      AUTHORIZATION_COOKIE_OPTIONS_SECURE: "false"
+      # needs to be configured individually for each deployment/development environment
+      # in order to have separate login-states for each environment
+      AUTHORIZATION_COOKIE_OPTIONS_NAME: "authtoken_dev"
+      # CORS whitelist for the 'Access-Control-Allow-Origin' response header
+      CORS_WHITELIST: '["http://localhost:3000","http://localhost:4200"]'
+    ulimits:
+      nofile:
+        soft: 8196
+        hard: 8196

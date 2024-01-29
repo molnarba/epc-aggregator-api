@@ -1,0 +1,34 @@
+type OrderList {
+  metadata: Metadata!
+  orders: [Order]
+}
+
+type Order {
+  orderNumber: String
+  createdAt: String 
+  orderItems: [OrderItem]
+  totalPriceInCent: Int
+  currencyCode: String
+  orderState: String
+}
+
+type OrderItem {
+  productId: String
+  productName: String
+  productSlug: String
+  sku: String
+  totalPriceInCent: Int
+  priceInCent: Int
+  quantity: Int
+}
+
+type Metadata {
+  count: Int!
+  limit: Int!
+  offset: Int!
+  total: Int!
+}
+
+type Query {
+  myOrders(locale: String): OrderList
+}

@@ -1,0 +1,79 @@
+type Customer {
+  email: String!
+  salutation: String
+  firstName: String
+  lastName: String
+  id: String!
+  isEmailVerified: Boolean
+  # this token contains the encrypted customer-ID
+  # and is used to verify the JSON web token contained in the authorization cookie
+  token: String
+  version: Int!
+  addresses: [CustomerAddress]!
+  defaultShippingAddressKey: String
+  defaultBillingAddressKey: String
+}
+
+type CustomerAddress {
+  key: String
+  type: String
+  salutation: String
+  firstName: String
+  lastName: String
+  streetName: String
+  streetNumber: String
+  postalCode: String
+  city: String
+  country: String
+  company: String
+}
+
+input CustomerUpdateAction {
+  updateShippingAddressAction: UpdateAddressAction
+  updateBillingAddressAction: UpdateAddressAction
+}
+
+input UpdateAddressAction {
+  address: Address
+}
+
+input Address {
+  key: String
+  type: String
+  salutation: String
+  firstName: String
+  lastName: String
+  streetName: String
+  streetNumber: String
+  postalCode: String
+  city: String
+  country: String!
+  company: String
+}
+
+input SignUpCustomerData {
+    email: String!
+    password: String!
+    firstName: String
+    lastName: String
+    salutation: String
+}
+type Mutation {
+  signUpCustomer(
+    customerData: SignUpCustomerData!,
+    anonymousCartId: String,
+    rememberMe: Boolean,
+    locale: String,
+    currencyCode: String): Customer
+  batchUpdateMyCustomer(actions: [CustomerUpdateAction]!): Customer
+}
+
+type Query {
+  signInCustomer(
+    email: String!,
+    password: String!,
+    anonymousCartId: String,
+    rememberMe: Boolean): Customer
+  signOutCustomer: Boolean
+  myCustomer: Customer
+}

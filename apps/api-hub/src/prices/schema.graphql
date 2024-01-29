@@ -1,0 +1,8 @@
+type ProductVariant @extends {
+    sku: String! @external
+    prices: [Price]
+}
+
+type Price {
+  centAmount: Int
+}

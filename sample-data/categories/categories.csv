@@ -1,0 +1,7 @@
+id,key,externalId,parentId,orderHint,createdAt,lastModifiedAt,name.de-DE,description.de-DE,slug.de-DE,metaTitle.de-DE,metaDescription.de-DE,metaKeywords.de-DE,name.en-US,description.en-US,slug.en-US,metaTitle.en-US,metaDescription.en-US,metaKeywords.en-US
+e97fdf4c-f5fe-444a-881d-9470cc72b074,category_buildingmaterials,,,0.2,2020-01-30T09:59:59.987Z,2020-01-30T09:59:59.987Z,Baustoffe,Baustoffe,baustoffe,Baustoffe,Baustoffe,,,,,,,
+ad6bd832-026b-4d83-b5d8-e60f680bda89,category_office,,,0.6,2020-01-30T10:03:13.885Z,2020-01-30T10:03:13.885Z,Bürobedarf,Bürobedarf,brobedarf,Bürobedarf,Bürobedarf,,,,,,,
+bc745290-ed72-4d8e-9980-7d817638e585,category_light,,,0.3,2020-01-30T10:01:17.564Z,2020-01-30T10:01:17.564Z,Lichttechnik und Leuchtmittel,Lichttechnik und Leuchtmittel,lichttechnik-und-leuchtmittel,Lichttechnik und Leuchtmittel,Lichttechnik und Leuchtmittel,,,,,,,
+d6d02853-614a-448f-b19f-c6dd341177bb,category_tools,,,0.1,2020-01-30T09:59:04.737Z,2020-01-30T09:59:04.737Z,Werkzeuge,Werkzeuge,werkzeuge,Werkzeuge,Werkzeuge,,,,,,,
+c82707df-40bb-48bc-bdad-522bec9d785b,category_carsandbikes,,,0.5,2020-01-30T10:02:40.466Z,2020-01-30T10:02:40.466Z,KFZ und Zweirad,KFZ und Zweirad,kfz-und-zweirad,KFZ und Zweirad,KFZ und Zweirad,,,,,,,
+b245bcb6-90ef-4eda-96e9-7e1b573c5e1d,category_measurements,,,0.4,2020-01-30T10:02:02.853Z,2020-01-30T10:02:02.853Z,Messtechnik,Messtechnik,messtechnik,Messtechnik,Messtechnik,,,,,,,
